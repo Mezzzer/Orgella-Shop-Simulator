@@ -1,2 +1,3 @@
 # Orgella-Shop-Simulator
-Project for BigData
+## Plot
+Year 2049. Earth is ruled by monopolistic Orgella Corporation. It is specializing in creating items called The Products. Its content remain shrouded in mystery. Humanity is on a verge of destruction. Those who survived have only purpose - to buy The Products. Will you survive in this dark, hostile environment? We will find out...
