@@ -5,5 +5,5 @@ USE Test;
 
 CREATE TABLE Products (
   id int PRIMARY KEY,
-  quantity int
+  quantity counter
 );

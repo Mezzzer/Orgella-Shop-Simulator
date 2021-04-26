@@ -14,7 +14,6 @@ public class Client implements Runnable {
 
     public void buyProduct() throws BackendException {
         Random rand = new Random();
-//        int productNumber = rand.nextInt(Shop.getInstance().getProducts().size());
         int productNumber = rand.nextInt(Shop.getInstance().getProductsNumber());
 
         int boughtProductId = Shop.getInstance().buyProduct(productNumber);

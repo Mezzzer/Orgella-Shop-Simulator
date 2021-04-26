@@ -1,32 +1,12 @@
-317  INFO  c.d.driver.core.GuavaCompatibility: Detected Guava >= 19 in the classpath, using modern compatibility layer
-1340 INFO  com.datastax.driver.core.Native: Could not load JNR C Library, native system calls through this library will not be available (set this logger level to DEBUG to see the full stack trace).
-1341 INFO  c.datastax.driver.core.ClockFactory: Using java.lang.System clock to generate timestamps.
-1481 WARN  com.datastax.driver.core.NettyUtil: Found Netty's native epoll transport, but not running on linux-based operating system. Using NIO instead.
-2176 INFO  c.d.d.c.p.DCAwareRoundRobinPolicy: Using data-center name 'Mars' for DCAwareRoundRobinPolicy (if this is incorrect, please provide the correct datacenter name with DCAwareRoundRobinPolicy constructor)
-2184 INFO  com.datastax.driver.core.Cluster: New Cassandra host /127.0.0.1:9042 added
-2184 INFO  com.datastax.driver.core.Cluster: New Cassandra host /172.18.0.4:9042 added
-2184 INFO  com.datastax.driver.core.Cluster: New Cassandra host /172.18.0.3:9042 added
-7215 WARN  c.d.driver.core.HostConnectionPool: Error creating connection to /172.18.0.3:9042
-com.datastax.driver.core.exceptions.TransportException: [/172.18.0.3:9042] Cannot connect
-	at com.datastax.driver.core.Connection$1.operationComplete(Connection.java:165)
-	at com.datastax.driver.core.Connection$1.operationComplete(Connection.java:148)
-	at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:507)
-	at io.netty.util.concurrent.DefaultPromise.notifyListeners0(DefaultPromise.java:500)
-	at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:479)
-	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:420)
-	at io.netty.util.concurrent.DefaultPromise.tryFailure(DefaultPromise.java:122)
-	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe$1.run(AbstractNioChannel.java:220)
-	at io.netty.util.concurrent.PromiseTask$RunnableAdapter.call(PromiseTask.java:38)
-	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:120)
-	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:399)
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:446)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:131)
-	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
-	at java.base/java.lang.Thread.run(Thread.java:844)
-Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /172.18.0.3:9042
-	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe$1.run(AbstractNioChannel.java:218)
-	... 7 common frames omitted
-7215 WARN  c.d.driver.core.HostConnectionPool: Error creating connection to /172.18.0.4:9042
+238  INFO  c.d.driver.core.GuavaCompatibility: Detected Guava >= 19 in the classpath, using modern compatibility layer
+1214 INFO  com.datastax.driver.core.Native: Could not load JNR C Library, native system calls through this library will not be available (set this logger level to DEBUG to see the full stack trace).
+1214 INFO  c.datastax.driver.core.ClockFactory: Using java.lang.System clock to generate timestamps.
+1356 WARN  com.datastax.driver.core.NettyUtil: Found Netty's native epoll transport, but not running on linux-based operating system. Using NIO instead.
+1847 INFO  c.d.d.c.p.DCAwareRoundRobinPolicy: Using data-center name 'Mars' for DCAwareRoundRobinPolicy (if this is incorrect, please provide the correct datacenter name with DCAwareRoundRobinPolicy constructor)
+1849 INFO  com.datastax.driver.core.Cluster: New Cassandra host /127.0.0.1:9042 added
+1850 INFO  com.datastax.driver.core.Cluster: New Cassandra host /172.18.0.4:9042 added
+1850 INFO  com.datastax.driver.core.Cluster: New Cassandra host /172.18.0.3:9042 added
+6896 WARN  c.d.driver.core.HostConnectionPool: Error creating connection to /172.18.0.4:9042
 com.datastax.driver.core.exceptions.TransportException: [/172.18.0.4:9042] Cannot connect
 	at com.datastax.driver.core.Connection$1.operationComplete(Connection.java:165)
 	at com.datastax.driver.core.Connection$1.operationComplete(Connection.java:148)
@@ -46,46 +26,8 @@ com.datastax.driver.core.exceptions.TransportException: [/172.18.0.4:9042] Canno
 Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /172.18.0.4:9042
 	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe$1.run(AbstractNioChannel.java:218)
 	... 7 common frames omitted
-7219 WARN  com.datastax.driver.core.Session: Error creating pool to /172.18.0.3:9042
-com.datastax.driver.core.exceptions.ConnectionException: [/172.18.0.3:9042] Pool was closed during initialization
-	at com.datastax.driver.core.HostConnectionPool$2.onSuccess(HostConnectionPool.java:148)
-	at com.datastax.driver.core.HostConnectionPool$2.onSuccess(HostConnectionPool.java:134)
-	at com.google.common.util.concurrent.Futures$6.run(Futures.java:1773)
-	at com.google.common.util.concurrent.MoreExecutors$DirectExecutor.execute(MoreExecutors.java:456)
-	at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:817)
-	at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:753)
-	at com.google.common.util.concurrent.AbstractFuture.set(AbstractFuture.java:613)
-	at com.google.common.util.concurrent.CollectionFuture$CollectionFutureRunningState.handleAllCompleted(CollectionFuture.java:76)
-	at com.google.common.util.concurrent.AggregateFuture$RunningState.processCompleted(AggregateFuture.java:255)
-	at com.google.common.util.concurrent.AggregateFuture$RunningState.decrementCountAndMaybeComplete(AggregateFuture.java:242)
-	at com.google.common.util.concurrent.AggregateFuture$RunningState.access$300(AggregateFuture.java:91)
-	at com.google.common.util.concurrent.AggregateFuture$RunningState$1.run(AggregateFuture.java:146)
-	at com.google.common.util.concurrent.MoreExecutors$DirectExecutor.execute(MoreExecutors.java:456)
-	at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:817)
-	at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:753)
-	at com.google.common.util.concurrent.AbstractFuture.completeWithFuture(AbstractFuture.java:730)
-	at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:666)
-	at com.google.common.util.concurrent.Futures$AsyncCatchingFuture.doFallback(Futures.java:826)
-	at com.google.common.util.concurrent.Futures$AsyncCatchingFuture.doFallback(Futures.java:813)
-	at com.google.common.util.concurrent.Futures$AbstractCatchingFuture.run(Futures.java:789)
-	at com.google.common.util.concurrent.MoreExecutors$DirectExecutor.execute(MoreExecutors.java:456)
-	at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:817)
-	at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:753)
-	at com.google.common.util.concurrent.AbstractFuture.completeWithFuture(AbstractFuture.java:730)
-	at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:666)
-	at com.google.common.util.concurrent.Futures$AsyncCatchingFuture.doFallback(Futures.java:826)
-	at com.google.common.util.concurrent.Futures$AsyncCatchingFuture.doFallback(Futures.java:813)
-	at com.google.common.util.concurrent.Futures$AbstractCatchingFuture.run(Futures.java:789)
-	at com.google.common.util.concurrent.MoreExecutors$DirectExecutor.execute(MoreExecutors.java:456)
-	at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:817)
-	at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:753)
-	at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:634)
-	at com.google.common.util.concurrent.Futures$AbstractChainingFuture.run(Futures.java:1405)
-	at com.google.common.util.concurrent.MoreExecutors$DirectExecutor.execute(MoreExecutors.java:456)
-	at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:817)
-	at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:753)
-	at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:634)
-	at com.google.common.util.concurrent.SettableFuture.setException(SettableFuture.java:53)
+6896 WARN  c.d.driver.core.HostConnectionPool: Error creating connection to /172.18.0.3:9042
+com.datastax.driver.core.exceptions.TransportException: [/172.18.0.3:9042] Cannot connect
 	at com.datastax.driver.core.Connection$1.operationComplete(Connection.java:165)
 	at com.datastax.driver.core.Connection$1.operationComplete(Connection.java:148)
 	at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:507)
@@ -101,7 +43,10 @@ com.datastax.driver.core.exceptions.ConnectionException: [/172.18.0.3:9042] Pool
 	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:131)
 	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
 	at java.base/java.lang.Thread.run(Thread.java:844)
-7219 WARN  com.datastax.driver.core.Session: Error creating pool to /172.18.0.4:9042
+Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /172.18.0.3:9042
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe$1.run(AbstractNioChannel.java:218)
+	... 7 common frames omitted
+6902 WARN  com.datastax.driver.core.Session: Error creating pool to /172.18.0.4:9042
 com.datastax.driver.core.exceptions.ConnectionException: [/172.18.0.4:9042] Pool was closed during initialization
 	at com.datastax.driver.core.HostConnectionPool$2.onSuccess(HostConnectionPool.java:148)
 	at com.datastax.driver.core.HostConnectionPool$2.onSuccess(HostConnectionPool.java:134)
@@ -156,8 +101,131 @@ com.datastax.driver.core.exceptions.ConnectionException: [/172.18.0.4:9042] Pool
 	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:131)
 	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
 	at java.base/java.lang.Thread.run(Thread.java:844)
-7255 INFO  orgellashop.backend.BackendSession: Statements prepared
-7270 INFO  orgellashop.backend.BackendSession: Product 0 upserted
-7284 INFO  orgellashop.backend.BackendSession: Product 1 upserted
-7289 INFO  orgellashop.backend.BackendSession: Product 2 upserted
-8206 INFO  orgellashop.backend.BackendSession: All products deleted
+6902 WARN  com.datastax.driver.core.Session: Error creating pool to /172.18.0.3:9042
+com.datastax.driver.core.exceptions.ConnectionException: [/172.18.0.3:9042] Pool was closed during initialization
+	at com.datastax.driver.core.HostConnectionPool$2.onSuccess(HostConnectionPool.java:148)
+	at com.datastax.driver.core.HostConnectionPool$2.onSuccess(HostConnectionPool.java:134)
+	at com.google.common.util.concurrent.Futures$6.run(Futures.java:1773)
+	at com.google.common.util.concurrent.MoreExecutors$DirectExecutor.execute(MoreExecutors.java:456)
+	at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:817)
+	at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:753)
+	at com.google.common.util.concurrent.AbstractFuture.set(AbstractFuture.java:613)
+	at com.google.common.util.concurrent.CollectionFuture$CollectionFutureRunningState.handleAllCompleted(CollectionFuture.java:76)
+	at com.google.common.util.concurrent.AggregateFuture$RunningState.processCompleted(AggregateFuture.java:255)
+	at com.google.common.util.concurrent.AggregateFuture$RunningState.decrementCountAndMaybeComplete(AggregateFuture.java:242)
+	at com.google.common.util.concurrent.AggregateFuture$RunningState.access$300(AggregateFuture.java:91)
+	at com.google.common.util.concurrent.AggregateFuture$RunningState$1.run(AggregateFuture.java:146)
+	at com.google.common.util.concurrent.MoreExecutors$DirectExecutor.execute(MoreExecutors.java:456)
+	at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:817)
+	at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:753)
+	at com.google.common.util.concurrent.AbstractFuture.completeWithFuture(AbstractFuture.java:730)
+	at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:666)
+	at com.google.common.util.concurrent.Futures$AsyncCatchingFuture.doFallback(Futures.java:826)
+	at com.google.common.util.concurrent.Futures$AsyncCatchingFuture.doFallback(Futures.java:813)
+	at com.google.common.util.concurrent.Futures$AbstractCatchingFuture.run(Futures.java:789)
+	at com.google.common.util.concurrent.MoreExecutors$DirectExecutor.execute(MoreExecutors.java:456)
+	at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:817)
+	at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:753)
+	at com.google.common.util.concurrent.AbstractFuture.completeWithFuture(AbstractFuture.java:730)
+	at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:666)
+	at com.google.common.util.concurrent.Futures$AsyncCatchingFuture.doFallback(Futures.java:826)
+	at com.google.common.util.concurrent.Futures$AsyncCatchingFuture.doFallback(Futures.java:813)
+	at com.google.common.util.concurrent.Futures$AbstractCatchingFuture.run(Futures.java:789)
+	at com.google.common.util.concurrent.MoreExecutors$DirectExecutor.execute(MoreExecutors.java:456)
+	at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:817)
+	at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:753)
+	at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:634)
+	at com.google.common.util.concurrent.Futures$AbstractChainingFuture.run(Futures.java:1405)
+	at com.google.common.util.concurrent.MoreExecutors$DirectExecutor.execute(MoreExecutors.java:456)
+	at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:817)
+	at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:753)
+	at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:634)
+	at com.google.common.util.concurrent.SettableFuture.setException(SettableFuture.java:53)
+	at com.datastax.driver.core.Connection$1.operationComplete(Connection.java:165)
+	at com.datastax.driver.core.Connection$1.operationComplete(Connection.java:148)
+	at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:507)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners0(DefaultPromise.java:500)
+	at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:479)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:420)
+	at io.netty.util.concurrent.DefaultPromise.tryFailure(DefaultPromise.java:122)
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe$1.run(AbstractNioChannel.java:220)
+	at io.netty.util.concurrent.PromiseTask$RunnableAdapter.call(PromiseTask.java:38)
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:120)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:399)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:446)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:131)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+6944 INFO  orgellashop.backend.BackendSession: Statements prepared
+6968 INFO  orgellashop.backend.BackendSession: Product 0 upserted
+6977 INFO  orgellashop.backend.BackendSession: Product 1 upserted
+6995 INFO  orgellashop.backend.BackendSession: Product 0 updated
+7399 INFO  orgellashop.backend.BackendSession: Product 0 updated
+7808 INFO  orgellashop.backend.BackendSession: Product 1 updated
+9547 INFO  orgellashop.backend.BackendSession: Product 1 updated
+10424 INFO  orgellashop.backend.BackendSession: Product 1 updated
+11029 INFO  orgellashop.backend.BackendSession: Product 1 updated
+11217 INFO  orgellashop.backend.BackendSession: Product 0 updated
+11268 INFO  orgellashop.backend.BackendSession: Product 0 updated
+11422 INFO  orgellashop.backend.BackendSession: Products updated
+11444 INFO  orgellashop.backend.BackendSession: Products updated
+12161 INFO  orgellashop.backend.BackendSession: Product 1 updated
+12183 INFO  orgellashop.backend.BackendSession: Product 0 updated
+12767 INFO  orgellashop.backend.BackendSession: Product 1 updated
+13444 INFO  orgellashop.backend.BackendSession: Product 0 updated
+15975 INFO  orgellashop.backend.BackendSession: Product 0 updated
+16510 INFO  orgellashop.backend.BackendSession: Product 0 updated
+17154 INFO  orgellashop.backend.BackendSession: Product 0 updated
+19296 INFO  orgellashop.backend.BackendSession: Product 0 updated
+20903 INFO  orgellashop.backend.BackendSession: Product 0 updated
+22081 INFO  orgellashop.backend.BackendSession: Product 1 updated
+25032 INFO  orgellashop.backend.BackendSession: Product 0 updated
+26154 INFO  orgellashop.backend.BackendSession: Product 1 updated
+26580 INFO  orgellashop.backend.BackendSession: Product 1 updated
+27917 INFO  orgellashop.backend.BackendSession: Product 0 updated
+28975 INFO  orgellashop.backend.BackendSession: Product 1 updated
+29852 INFO  orgellashop.backend.BackendSession: Product 1 updated
+30228 INFO  orgellashop.backend.BackendSession: Product 0 updated
+30808 INFO  orgellashop.backend.BackendSession: Product 0 updated
+31110 INFO  orgellashop.backend.BackendSession: Product 0 updated
+31236 INFO  orgellashop.backend.BackendSession: Product 0 updated
+33433 INFO  orgellashop.backend.BackendSession: Product 0 updated
+35106 INFO  orgellashop.backend.BackendSession: Product 0 updated
+36260 INFO  orgellashop.backend.BackendSession: Product 0 updated
+37469 INFO  orgellashop.backend.BackendSession: Products updated
+37476 INFO  orgellashop.backend.BackendSession: Products updated
+38553 INFO  orgellashop.backend.BackendSession: Product 0 updated
+38884 INFO  orgellashop.backend.BackendSession: Product 0 updated
+40591 INFO  orgellashop.backend.BackendSession: Product 1 updated
+41709 INFO  orgellashop.backend.BackendSession: Product 1 updated
+44221 INFO  orgellashop.backend.BackendSession: Product 0 updated
+44513 INFO  orgellashop.backend.BackendSession: Product 1 updated
+46838 INFO  orgellashop.backend.BackendSession: Product 0 updated
+47574 INFO  orgellashop.backend.BackendSession: Product 1 updated
+47651 INFO  orgellashop.backend.BackendSession: Product 0 updated
+48059 INFO  orgellashop.backend.BackendSession: Product 1 updated
+50075 INFO  orgellashop.backend.BackendSession: Product 1 updated
+50704 INFO  orgellashop.backend.BackendSession: Product 0 updated
+51305 INFO  orgellashop.backend.BackendSession: Product 1 updated
+51904 INFO  orgellashop.backend.BackendSession: Product 1 updated
+52003 INFO  orgellashop.backend.BackendSession: Product 1 updated
+52021 INFO  orgellashop.backend.BackendSession: Product 0 updated
+54265 INFO  orgellashop.backend.BackendSession: Product 0 updated
+54938 INFO  orgellashop.backend.BackendSession: Product 1 updated
+55680 INFO  orgellashop.backend.BackendSession: Products updated
+55686 INFO  orgellashop.backend.BackendSession: Products updated
+55686 INFO  orgellashop.backend.BackendSession: Product 0 updated
+56709 INFO  orgellashop.backend.BackendSession: Product 1 updated
+59177 INFO  orgellashop.backend.BackendSession: Product 1 updated
+59894 INFO  orgellashop.backend.BackendSession: Product 1 updated
+59904 INFO  orgellashop.backend.BackendSession: Product 1 updated
+62973 INFO  orgellashop.backend.BackendSession: Product 1 updated
+64050 INFO  orgellashop.backend.BackendSession: Product 1 updated
+64518 INFO  orgellashop.backend.BackendSession: Product 1 updated
+64880 INFO  orgellashop.backend.BackendSession: Product 1 updated
+65361 INFO  orgellashop.backend.BackendSession: Product 0 updated
+65554 INFO  orgellashop.backend.BackendSession: Product 0 updated
+66019 INFO  orgellashop.backend.BackendSession: Product 1 updated
+66401 INFO  orgellashop.backend.BackendSession: Product 0 updated
+66545 INFO  orgellashop.backend.BackendSession: Product 0 updated
+66869 INFO  orgellashop.backend.BackendSession: Product 1 updated

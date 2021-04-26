@@ -50,17 +50,17 @@ public class BackendSession {
     private static PreparedStatement UPDATE_PRODUCT;
     private static PreparedStatement DELIVER_PRODUCTS;
 
-    private static final String PRODUCT_FORMAT = "- %03d %03d\n";
+    private static final String PRODUCT_FORMAT = "%d %d\n";
 
     private void prepareStatements() throws BackendException {
         try {
             SELECT_ALL_FROM_PRODUCTS = session.prepare("SELECT * FROM products;");
-            INSERT_INTO_PRODUCTS = session
-                    .prepare("INSERT INTO products (id, quantity) VALUES (?, ?);");
+//            INSERT_INTO_PRODUCTS = session.prepare("INSERT INTO products (id) VALUES (?);");
+            INSERT_INTO_PRODUCTS = session.prepare("UPDATE products SET quantity = quantity + 10 WHERE id = ?;");
+
             DELETE_ALL_FROM_PRODUCTS = session.prepare("TRUNCATE products;");
             GET_PRODUCT = session.prepare("SELECT * FROM products WHERE id = ?");
-            UPDATE_PRODUCT = session.prepare("UPDATE products SET quantity = quantity - ? WHERE id = ?");
-            DELIVER_PRODUCTS = session.prepare("UPDATE products SET quantity = quantity + ? WHERE quantity=0");
+            UPDATE_PRODUCT = session.prepare("UPDATE products SET quantity = quantity - 1 WHERE id = ?");
         } catch (Exception e) {
             throw new BackendException("Could not prepare statements. " + e.getMessage() + ".", e);
         }
@@ -84,7 +84,7 @@ public class BackendSession {
 
         for (Row row : rs) {
             int rId = row.getInt("id");
-            int rQuantity = row.getInt("quantity");
+            long rQuantity = row.getLong("quantity");
 
             builder.append(String.format(PRODUCT_FORMAT, rId, rQuantity));
         }
@@ -106,7 +106,7 @@ public class BackendSession {
 
         for (Row row : rs) {
             int rId = row.getInt("id");
-            int rQuantity = row.getInt("quantity");
+            long rQuantity = row.getLong("quantity");
 
             builder.append(String.format(PRODUCT_FORMAT, rId, rQuantity));
         }
@@ -116,7 +116,7 @@ public class BackendSession {
 
     public void upsertProduct(int id, int quantity) throws BackendException {
         BoundStatement bs = new BoundStatement(INSERT_INTO_PRODUCTS);
-        bs.bind(id, quantity);
+        bs.bind(id);
 
         try {
             session.execute(bs);
@@ -129,7 +129,7 @@ public class BackendSession {
 
     public void updateProduct(int id, int quantity) throws BackendException {
         BoundStatement bs = new BoundStatement(UPDATE_PRODUCT);
-        bs.bind(id, quantity);
+        bs.bind(id);
 
         try {
             session.execute(bs);
@@ -140,9 +140,9 @@ public class BackendSession {
         logger.info("Product " + id + " updated");
     }
 
-    public void deliverProducts(int quantity) throws BackendException {
-        BoundStatement bs = new BoundStatement(DELIVER_PRODUCTS);
-        bs.bind(quantity);
+    public void deliverProducts(int id) throws BackendException {
+        BoundStatement bs = new BoundStatement(INSERT_INTO_PRODUCTS);
+        bs.bind(id);
 
         try {
             session.execute(bs);

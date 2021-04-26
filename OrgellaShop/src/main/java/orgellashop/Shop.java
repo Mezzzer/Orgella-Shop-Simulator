@@ -11,15 +11,10 @@ import java.util.Random;
 public class Shop implements Runnable {
 
     private static Shop instance;
-
-    private List<Product> products;
-
     private BackendSession session;
-
     private int productsNumber;
 
     private Shop() throws BackendException {
-        this.products = new ArrayList<>();
         this.productsNumber = 0;
 
         String PROPERTIES_FILENAME = "config.properties";
@@ -50,14 +45,6 @@ public class Shop implements Runnable {
         return instance;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
     public int getProductsNumber() {
         return productsNumber;
     }
@@ -68,27 +55,16 @@ public class Shop implements Runnable {
 
 
     public void addNewProduct(int id) throws BackendException {
-//        int id = this.products.size();
-//        Product product = new Product(id, "The Product#" + id);
-//        product.setQuantity(10);
-//        this.products.add(product);
         session.upsertProduct(id, 10);
         this.productsNumber += 1;
     }
 
     public int buyProduct(int id) throws BackendException {
-//        if (this.products.get(id).getQuantity() != 0) {
-//            this.products.get(id).decreaseQuantity(1);
-//            System.out.println("Shop: The Product " + id + "has been bought. " + this.products.get(id).getQuantity() + " left.");
-//            return id;
-//        }
-//        else
-//            return -1;
         String product = session.getUser(id);
-        String[] productList = product.split("\t");
-        if (Integer.parseInt(productList[0]) != 0) {
+        String[] productList = product.split("\\s+");
+        if (Integer.parseInt(productList[1]) != 0) {
             session.updateProduct(id, 1);
-            System.out.println("Shop: The Product " + id + "has been bought. " + this.products.get(id).getQuantity() + " left.");
+            System.out.println("Shop: The Product#" + id + " has been bought. " + productList[1] + " left.");
             return id;
         }
         else
@@ -96,10 +72,8 @@ public class Shop implements Runnable {
     }
 
     public void deliverProducts() throws BackendException {
-//        for (Product p : products) {
-//            p.increaseQuantity(5);
-//        }
-        session.deliverProducts(10);
+        for (int i=0; i<this.productsNumber; i++)
+            session.deliverProducts(i);
     }
 
     @Override
@@ -107,7 +81,7 @@ public class Shop implements Runnable {
         System.out.println("Shop is running");
         Random rand = new Random();
         while(true){
-            int randomNumber = rand.nextInt(500);
+            int randomNumber = rand.nextInt(300);
             if (randomNumber == 13){
                 try {
                     this.deliverProducts();
