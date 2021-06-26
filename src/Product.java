@@ -1,3 +1,4 @@
+//docelowo tej klasy w ogóle nie będzie, zostanie zastąpiona zapytaniami do bazy na temat danego produktu
 public class Product {
     private int id;
     private String name;
@@ -31,5 +32,13 @@ public class Product {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public void decreaseQuantity(int number){
+        this.quantity = quantity - number;
+    }
+
+    public void increaseQuantity(int number){
+        this.quantity = quantity + number;
     }
 }
