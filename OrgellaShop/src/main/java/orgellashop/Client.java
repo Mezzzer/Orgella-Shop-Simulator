@@ -1,8 +1,6 @@
 package orgellashop;
 import orgellashop.backend.BackendException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Client implements Runnable {
@@ -14,13 +12,8 @@ public class Client implements Runnable {
 
     public void buyProduct() throws BackendException {
         Random rand = new Random();
-        int productNumber = rand.nextInt(Shop.getInstance().getProductsNumber());
-
-        int boughtProductId = Shop.getInstance().buyProduct(productNumber);
-        if (boughtProductId != -1)
-            System.out.println("Me, client " + this.id + " bought The Product#" + boughtProductId);
-        else
-            System.out.println("Me, client " + this.id + " couldn't buy The Product#" + productNumber);
+        int productNumber = rand.nextInt(Main.shop.getProductsNumber());
+        Main.shop.buyProduct(productNumber, this.id);
     }
 
     @Override

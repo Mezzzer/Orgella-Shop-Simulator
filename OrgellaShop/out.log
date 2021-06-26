@@ -1,12 +1,12 @@
-238  INFO  c.d.driver.core.GuavaCompatibility: Detected Guava >= 19 in the classpath, using modern compatibility layer
-1214 INFO  com.datastax.driver.core.Native: Could not load JNR C Library, native system calls through this library will not be available (set this logger level to DEBUG to see the full stack trace).
-1214 INFO  c.datastax.driver.core.ClockFactory: Using java.lang.System clock to generate timestamps.
-1356 WARN  com.datastax.driver.core.NettyUtil: Found Netty's native epoll transport, but not running on linux-based operating system. Using NIO instead.
-1847 INFO  c.d.d.c.p.DCAwareRoundRobinPolicy: Using data-center name 'Mars' for DCAwareRoundRobinPolicy (if this is incorrect, please provide the correct datacenter name with DCAwareRoundRobinPolicy constructor)
-1849 INFO  com.datastax.driver.core.Cluster: New Cassandra host /127.0.0.1:9042 added
-1850 INFO  com.datastax.driver.core.Cluster: New Cassandra host /172.18.0.4:9042 added
-1850 INFO  com.datastax.driver.core.Cluster: New Cassandra host /172.18.0.3:9042 added
-6896 WARN  c.d.driver.core.HostConnectionPool: Error creating connection to /172.18.0.4:9042
+254  INFO  c.d.driver.core.GuavaCompatibility: Detected Guava >= 19 in the classpath, using modern compatibility layer
+1217 INFO  com.datastax.driver.core.Native: Could not load JNR C Library, native system calls through this library will not be available (set this logger level to DEBUG to see the full stack trace).
+1217 INFO  c.datastax.driver.core.ClockFactory: Using java.lang.System clock to generate timestamps.
+1351 WARN  com.datastax.driver.core.NettyUtil: Found Netty's native epoll transport, but not running on linux-based operating system. Using NIO instead.
+1825 INFO  c.d.d.c.p.DCAwareRoundRobinPolicy: Using data-center name 'Mars' for DCAwareRoundRobinPolicy (if this is incorrect, please provide the correct datacenter name with DCAwareRoundRobinPolicy constructor)
+1827 INFO  com.datastax.driver.core.Cluster: New Cassandra host /127.0.0.1:9042 added
+1828 INFO  com.datastax.driver.core.Cluster: New Cassandra host /172.18.0.4:9042 added
+1828 INFO  com.datastax.driver.core.Cluster: New Cassandra host /172.18.0.2:9042 added
+6858 WARN  c.d.driver.core.HostConnectionPool: Error creating connection to /172.18.0.4:9042
 com.datastax.driver.core.exceptions.TransportException: [/172.18.0.4:9042] Cannot connect
 	at com.datastax.driver.core.Connection$1.operationComplete(Connection.java:165)
 	at com.datastax.driver.core.Connection$1.operationComplete(Connection.java:148)
@@ -26,8 +26,8 @@ com.datastax.driver.core.exceptions.TransportException: [/172.18.0.4:9042] Canno
 Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /172.18.0.4:9042
 	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe$1.run(AbstractNioChannel.java:218)
 	... 7 common frames omitted
-6896 WARN  c.d.driver.core.HostConnectionPool: Error creating connection to /172.18.0.3:9042
-com.datastax.driver.core.exceptions.TransportException: [/172.18.0.3:9042] Cannot connect
+6858 WARN  c.d.driver.core.HostConnectionPool: Error creating connection to /172.18.0.2:9042
+com.datastax.driver.core.exceptions.TransportException: [/172.18.0.2:9042] Cannot connect
 	at com.datastax.driver.core.Connection$1.operationComplete(Connection.java:165)
 	at com.datastax.driver.core.Connection$1.operationComplete(Connection.java:148)
 	at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:507)
@@ -43,10 +43,10 @@ com.datastax.driver.core.exceptions.TransportException: [/172.18.0.3:9042] Canno
 	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:131)
 	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
 	at java.base/java.lang.Thread.run(Thread.java:844)
-Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /172.18.0.3:9042
+Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /172.18.0.2:9042
 	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe$1.run(AbstractNioChannel.java:218)
 	... 7 common frames omitted
-6902 WARN  com.datastax.driver.core.Session: Error creating pool to /172.18.0.4:9042
+6863 WARN  com.datastax.driver.core.Session: Error creating pool to /172.18.0.4:9042
 com.datastax.driver.core.exceptions.ConnectionException: [/172.18.0.4:9042] Pool was closed during initialization
 	at com.datastax.driver.core.HostConnectionPool$2.onSuccess(HostConnectionPool.java:148)
 	at com.datastax.driver.core.HostConnectionPool$2.onSuccess(HostConnectionPool.java:134)
@@ -101,8 +101,8 @@ com.datastax.driver.core.exceptions.ConnectionException: [/172.18.0.4:9042] Pool
 	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:131)
 	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
 	at java.base/java.lang.Thread.run(Thread.java:844)
-6902 WARN  com.datastax.driver.core.Session: Error creating pool to /172.18.0.3:9042
-com.datastax.driver.core.exceptions.ConnectionException: [/172.18.0.3:9042] Pool was closed during initialization
+6863 WARN  com.datastax.driver.core.Session: Error creating pool to /172.18.0.2:9042
+com.datastax.driver.core.exceptions.ConnectionException: [/172.18.0.2:9042] Pool was closed during initialization
 	at com.datastax.driver.core.HostConnectionPool$2.onSuccess(HostConnectionPool.java:148)
 	at com.datastax.driver.core.HostConnectionPool$2.onSuccess(HostConnectionPool.java:134)
 	at com.google.common.util.concurrent.Futures$6.run(Futures.java:1773)
@@ -156,76 +156,135 @@ com.datastax.driver.core.exceptions.ConnectionException: [/172.18.0.3:9042] Pool
 	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:131)
 	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
 	at java.base/java.lang.Thread.run(Thread.java:844)
-6944 INFO  orgellashop.backend.BackendSession: Statements prepared
-6968 INFO  orgellashop.backend.BackendSession: Product 0 upserted
-6977 INFO  orgellashop.backend.BackendSession: Product 1 upserted
-6995 INFO  orgellashop.backend.BackendSession: Product 0 updated
-7399 INFO  orgellashop.backend.BackendSession: Product 0 updated
-7808 INFO  orgellashop.backend.BackendSession: Product 1 updated
-9547 INFO  orgellashop.backend.BackendSession: Product 1 updated
-10424 INFO  orgellashop.backend.BackendSession: Product 1 updated
-11029 INFO  orgellashop.backend.BackendSession: Product 1 updated
-11217 INFO  orgellashop.backend.BackendSession: Product 0 updated
-11268 INFO  orgellashop.backend.BackendSession: Product 0 updated
-11422 INFO  orgellashop.backend.BackendSession: Products updated
-11444 INFO  orgellashop.backend.BackendSession: Products updated
-12161 INFO  orgellashop.backend.BackendSession: Product 1 updated
-12183 INFO  orgellashop.backend.BackendSession: Product 0 updated
-12767 INFO  orgellashop.backend.BackendSession: Product 1 updated
-13444 INFO  orgellashop.backend.BackendSession: Product 0 updated
-15975 INFO  orgellashop.backend.BackendSession: Product 0 updated
-16510 INFO  orgellashop.backend.BackendSession: Product 0 updated
-17154 INFO  orgellashop.backend.BackendSession: Product 0 updated
-19296 INFO  orgellashop.backend.BackendSession: Product 0 updated
-20903 INFO  orgellashop.backend.BackendSession: Product 0 updated
-22081 INFO  orgellashop.backend.BackendSession: Product 1 updated
-25032 INFO  orgellashop.backend.BackendSession: Product 0 updated
-26154 INFO  orgellashop.backend.BackendSession: Product 1 updated
-26580 INFO  orgellashop.backend.BackendSession: Product 1 updated
-27917 INFO  orgellashop.backend.BackendSession: Product 0 updated
-28975 INFO  orgellashop.backend.BackendSession: Product 1 updated
-29852 INFO  orgellashop.backend.BackendSession: Product 1 updated
-30228 INFO  orgellashop.backend.BackendSession: Product 0 updated
-30808 INFO  orgellashop.backend.BackendSession: Product 0 updated
-31110 INFO  orgellashop.backend.BackendSession: Product 0 updated
-31236 INFO  orgellashop.backend.BackendSession: Product 0 updated
-33433 INFO  orgellashop.backend.BackendSession: Product 0 updated
-35106 INFO  orgellashop.backend.BackendSession: Product 0 updated
-36260 INFO  orgellashop.backend.BackendSession: Product 0 updated
-37469 INFO  orgellashop.backend.BackendSession: Products updated
-37476 INFO  orgellashop.backend.BackendSession: Products updated
-38553 INFO  orgellashop.backend.BackendSession: Product 0 updated
-38884 INFO  orgellashop.backend.BackendSession: Product 0 updated
-40591 INFO  orgellashop.backend.BackendSession: Product 1 updated
-41709 INFO  orgellashop.backend.BackendSession: Product 1 updated
-44221 INFO  orgellashop.backend.BackendSession: Product 0 updated
-44513 INFO  orgellashop.backend.BackendSession: Product 1 updated
-46838 INFO  orgellashop.backend.BackendSession: Product 0 updated
-47574 INFO  orgellashop.backend.BackendSession: Product 1 updated
-47651 INFO  orgellashop.backend.BackendSession: Product 0 updated
-48059 INFO  orgellashop.backend.BackendSession: Product 1 updated
-50075 INFO  orgellashop.backend.BackendSession: Product 1 updated
-50704 INFO  orgellashop.backend.BackendSession: Product 0 updated
-51305 INFO  orgellashop.backend.BackendSession: Product 1 updated
-51904 INFO  orgellashop.backend.BackendSession: Product 1 updated
-52003 INFO  orgellashop.backend.BackendSession: Product 1 updated
-52021 INFO  orgellashop.backend.BackendSession: Product 0 updated
-54265 INFO  orgellashop.backend.BackendSession: Product 0 updated
-54938 INFO  orgellashop.backend.BackendSession: Product 1 updated
-55680 INFO  orgellashop.backend.BackendSession: Products updated
-55686 INFO  orgellashop.backend.BackendSession: Products updated
-55686 INFO  orgellashop.backend.BackendSession: Product 0 updated
-56709 INFO  orgellashop.backend.BackendSession: Product 1 updated
-59177 INFO  orgellashop.backend.BackendSession: Product 1 updated
-59894 INFO  orgellashop.backend.BackendSession: Product 1 updated
-59904 INFO  orgellashop.backend.BackendSession: Product 1 updated
-62973 INFO  orgellashop.backend.BackendSession: Product 1 updated
-64050 INFO  orgellashop.backend.BackendSession: Product 1 updated
-64518 INFO  orgellashop.backend.BackendSession: Product 1 updated
-64880 INFO  orgellashop.backend.BackendSession: Product 1 updated
-65361 INFO  orgellashop.backend.BackendSession: Product 0 updated
-65554 INFO  orgellashop.backend.BackendSession: Product 0 updated
-66019 INFO  orgellashop.backend.BackendSession: Product 1 updated
-66401 INFO  orgellashop.backend.BackendSession: Product 0 updated
-66545 INFO  orgellashop.backend.BackendSession: Product 0 updated
-66869 INFO  orgellashop.backend.BackendSession: Product 1 updated
+6948 INFO  orgellashop.backend.BackendSession: Statements prepared
+6958 INFO  orgellashop.backend.BackendSession: Products updated
+6967 INFO  orgellashop.backend.BackendSession: Products updated
+6974 INFO  orgellashop.backend.BackendSession: Products updated
+6980 INFO  orgellashop.backend.BackendSession: Products updated
+6987 INFO  orgellashop.backend.BackendSession: Products updated
+7919 INFO  orgellashop.backend.BackendSession: Product 2 updated
+7938 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+9311 INFO  orgellashop.backend.BackendSession: Product 2 updated
+9315 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+10030 INFO  orgellashop.backend.BackendSession: Product 1 updated
+10037 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+10459 INFO  orgellashop.backend.BackendSession: Product 1 updated
+10471 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+10522 INFO  orgellashop.backend.BackendSession: Product 4 updated
+10530 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+10646 INFO  orgellashop.backend.BackendSession: Product 0 updated
+10660 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+11190 INFO  orgellashop.backend.BackendSession: Product 0 updated
+11199 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+32663 INFO  orgellashop.backend.BackendSession: Product 3 updated
+32668 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+34310 INFO  orgellashop.backend.BackendSession: Product 4 updated
+34315 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+34841 INFO  orgellashop.backend.BackendSession: Product 3 updated
+34846 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+51183 INFO  orgellashop.backend.BackendSession: Product 4 storage quantity decreased
+51193 INFO  orgellashop.backend.BackendSession: History Order inserted
+51209 INFO  orgellashop.backend.BackendSession: Product 1 storage quantity decreased
+51214 INFO  orgellashop.backend.BackendSession: History Order inserted
+51221 INFO  orgellashop.backend.BackendSession: Product 3 storage quantity decreased
+51224 INFO  orgellashop.backend.BackendSession: History Order inserted
+51232 INFO  orgellashop.backend.BackendSession: Product 0 storage quantity decreased
+51236 INFO  orgellashop.backend.BackendSession: History Order inserted
+51243 INFO  orgellashop.backend.BackendSession: Product 1 storage quantity decreased
+51247 INFO  orgellashop.backend.BackendSession: History Order inserted
+51254 INFO  orgellashop.backend.BackendSession: Product 4 storage quantity decreased
+51257 INFO  orgellashop.backend.BackendSession: History Order inserted
+51270 INFO  orgellashop.backend.BackendSession: Product 2 storage quantity decreased
+51273 INFO  orgellashop.backend.BackendSession: History Order inserted
+51283 INFO  orgellashop.backend.BackendSession: Product 3 storage quantity decreased
+51287 INFO  orgellashop.backend.BackendSession: History Order inserted
+51295 INFO  orgellashop.backend.BackendSession: Product 0 storage quantity decreased
+51299 INFO  orgellashop.backend.BackendSession: History Order inserted
+51308 INFO  orgellashop.backend.BackendSession: Product 2 storage quantity decreased
+51312 INFO  orgellashop.backend.BackendSession: History Order inserted
+51316 INFO  orgellashop.backend.BackendSession: Pending orders with delivery window 0 deleted
+51328 INFO  orgellashop.backend.BackendSession: Products updated
+51332 INFO  orgellashop.backend.BackendSession: Products updated
+51337 INFO  orgellashop.backend.BackendSession: Products updated
+51345 INFO  orgellashop.backend.BackendSession: Products updated
+51348 INFO  orgellashop.backend.BackendSession: Products updated
+51794 INFO  orgellashop.backend.BackendSession: Product 1 updated
+51802 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+53384 INFO  orgellashop.backend.BackendSession: Product 1 storage quantity decreased
+53389 INFO  orgellashop.backend.BackendSession: History Order inserted
+53395 INFO  orgellashop.backend.BackendSession: Pending orders with delivery window 1 deleted
+53407 INFO  orgellashop.backend.BackendSession: Products updated
+53411 INFO  orgellashop.backend.BackendSession: Products updated
+53415 INFO  orgellashop.backend.BackendSession: Products updated
+53420 INFO  orgellashop.backend.BackendSession: Products updated
+53425 INFO  orgellashop.backend.BackendSession: Products updated
+55434 INFO  orgellashop.backend.BackendSession: Product 3 updated
+55441 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+55500 INFO  orgellashop.backend.BackendSession: Product 2 updated
+55504 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+58733 INFO  orgellashop.backend.BackendSession: Product 1 updated
+58740 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+59425 INFO  orgellashop.backend.BackendSession: Product 4 updated
+59429 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+60054 INFO  orgellashop.backend.BackendSession: Product 2 updated
+60059 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+61291 INFO  orgellashop.backend.BackendSession: Product 3 updated
+61297 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+62088 INFO  orgellashop.backend.BackendSession: Product 4 updated
+62093 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+63115 INFO  orgellashop.backend.BackendSession: Product 0 updated
+63120 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+65497 INFO  orgellashop.backend.BackendSession: Product 3 storage quantity decreased
+65500 INFO  orgellashop.backend.BackendSession: History Order inserted
+65509 INFO  orgellashop.backend.BackendSession: Product 1 storage quantity decreased
+65513 INFO  orgellashop.backend.BackendSession: History Order inserted
+65521 INFO  orgellashop.backend.BackendSession: Product 4 storage quantity decreased
+65525 INFO  orgellashop.backend.BackendSession: History Order inserted
+65535 INFO  orgellashop.backend.BackendSession: Product 3 storage quantity decreased
+65538 INFO  orgellashop.backend.BackendSession: History Order inserted
+65555 INFO  orgellashop.backend.BackendSession: Product 0 storage quantity decreased
+65558 INFO  orgellashop.backend.BackendSession: History Order inserted
+65566 INFO  orgellashop.backend.BackendSession: Product 2 storage quantity decreased
+65570 INFO  orgellashop.backend.BackendSession: History Order inserted
+65578 INFO  orgellashop.backend.BackendSession: Product 2 storage quantity decreased
+65581 INFO  orgellashop.backend.BackendSession: History Order inserted
+65589 INFO  orgellashop.backend.BackendSession: Product 4 storage quantity decreased
+65631 INFO  orgellashop.backend.BackendSession: History Order inserted
+65636 INFO  orgellashop.backend.BackendSession: Pending orders with delivery window 2 deleted
+65647 INFO  orgellashop.backend.BackendSession: Products updated
+65650 INFO  orgellashop.backend.BackendSession: Products updated
+65656 INFO  orgellashop.backend.BackendSession: Products updated
+65660 INFO  orgellashop.backend.BackendSession: Products updated
+65665 INFO  orgellashop.backend.BackendSession: Products updated
+67140 INFO  orgellashop.backend.BackendSession: Product 4 updated
+67154 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+69287 INFO  orgellashop.backend.BackendSession: Product 3 updated
+69294 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+69564 INFO  orgellashop.backend.BackendSession: Product 1 updated
+69569 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+70090 INFO  orgellashop.backend.BackendSession: Product 3 updated
+70096 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+70482 INFO  orgellashop.backend.BackendSession: Product 3 updated
+70488 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+72214 INFO  orgellashop.backend.BackendSession: Product 0 updated
+72219 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+72439 INFO  orgellashop.backend.BackendSession: Product 1 updated
+72446 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+75331 INFO  orgellashop.backend.BackendSession: Product 2 updated
+75337 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+76816 INFO  orgellashop.backend.BackendSession: Product 4 updated
+76821 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+80384 INFO  orgellashop.backend.BackendSession: Product 4 updated
+80393 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+81562 INFO  orgellashop.backend.BackendSession: Product 4 updated
+81567 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+82172 INFO  orgellashop.backend.BackendSession: Product 0 updated
+82177 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+85411 INFO  orgellashop.backend.BackendSession: Product 3 updated
+85415 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+88055 INFO  orgellashop.backend.BackendSession: Product 2 updated
+88062 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+91649 INFO  orgellashop.backend.BackendSession: Product 0 updated
+91655 INFO  orgellashop.backend.BackendSession: Pending Order inserted
+93887 INFO  orgellashop.backend.BackendSession: Product 2 updated
+93891 INFO  orgellashop.backend.BackendSession: Pending Order inserted

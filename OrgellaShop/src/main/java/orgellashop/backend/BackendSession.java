@@ -44,32 +44,81 @@ public class BackendSession {
     }
 
     private static PreparedStatement SELECT_ALL_FROM_PRODUCTS;
-    private static PreparedStatement INSERT_INTO_PRODUCTS;
     private static PreparedStatement DELETE_ALL_FROM_PRODUCTS;
     private static PreparedStatement GET_PRODUCT;
-    private static PreparedStatement UPDATE_PRODUCT;
-    private static PreparedStatement DELIVER_PRODUCTS;
+    private static PreparedStatement DECREASE_QUANTITY;
+    private static PreparedStatement DECREASE_STORAGE_QUANTITY;
+    private static PreparedStatement INSERT_INTO_PENDING;
+    private static PreparedStatement GET_PENDINGS;
+    private static PreparedStatement DELETE_PENDINGS;
+    private static PreparedStatement GET_STORAGE_QUANTITY;
+    private static PreparedStatement INSERT_INTO_WAITING;
+    private static PreparedStatement GET_WAITINGS;
+    private static PreparedStatement DELETE_ALL_WAITINGS;
+    private static PreparedStatement GET_NEGATIVE_COUNTERS;
+    private static PreparedStatement INCREASE_QUANTITY;
+    private static PreparedStatement INSERT_INTO_HISTORY;
 
     private static final String PRODUCT_FORMAT = "%d %d\n";
+    private static final String ORDERS_FORMAT = "%d %d\n";
+    private static final String QUANTITY_FORMAT = "%d";
 
     private void prepareStatements() throws BackendException {
         try {
             SELECT_ALL_FROM_PRODUCTS = session.prepare("SELECT * FROM products;");
-//            INSERT_INTO_PRODUCTS = session.prepare("INSERT INTO products (id) VALUES (?);");
-            INSERT_INTO_PRODUCTS = session.prepare("UPDATE products SET quantity = quantity + 10 WHERE id = ?;");
-
             DELETE_ALL_FROM_PRODUCTS = session.prepare("TRUNCATE products;");
-            GET_PRODUCT = session.prepare("SELECT * FROM products WHERE id = ?");
-            UPDATE_PRODUCT = session.prepare("UPDATE products SET quantity = quantity - 1 WHERE id = ?");
+            GET_PRODUCT = session.prepare("SELECT id, quantity FROM products WHERE id = ?");
+            DECREASE_QUANTITY = session.prepare("UPDATE products SET quantity = quantity - 1 WHERE id = ?;");
+            DECREASE_STORAGE_QUANTITY = session.prepare("UPDATE products SET storage_quantity = storage_quantity - 1 WHERE id = ?");
+            GET_STORAGE_QUANTITY = session.prepare("SELECT storage_quantity FROM products WHERE id = ?;");
+            INSERT_INTO_PENDING = session.prepare("INSERT INTO PendingOrders (pk, product_id, client_id, delivery_window) " +
+                    "values (uuid(), ?, ?, ?);");
+            GET_PENDINGS = session.prepare("SELECT product_id, client_id FROM PendingOrders WHERE delivery_window = ?;");
+            DELETE_PENDINGS = session.prepare("DELETE FROM PendingOrders WHERE delivery_window = ?;");
+            INSERT_INTO_WAITING = session.prepare("INSERT INTO WaitingOrders (pk, product_id, client_id) " +
+                    "values (uuid(), ?, ?);");
+            GET_WAITINGS = session.prepare("SELECT * FROM WaitingOrders;");
+            DELETE_ALL_WAITINGS = session.prepare("TRUNCATE WaitingOrders;");
+            GET_NEGATIVE_COUNTERS = session.prepare("SELECT id, quantity FROM products WHERE quantity < 0 ALLOW FILTERING");
+            INCREASE_QUANTITY = session.prepare("UPDATE products SET quantity = quantity + ?, storage_quantity = storage_quantity + ? WHERE id = ?;");
+            INSERT_INTO_HISTORY = session.prepare("INSERT INTO OrdersHistory (product_id, client_id, sent_at) " +
+                    "values(?, ?, toTimeStamp(now()))");
+
         } catch (Exception e) {
             throw new BackendException("Could not prepare statements. " + e.getMessage() + ".", e);
         }
 
         logger.info("Statements prepared");
     }
+    //HISTORY
+    public void insertIntoHistory(int product_id, int client_id) throws BackendException {
+        BoundStatement bs = new BoundStatement(INSERT_INTO_HISTORY);
+        bs.bind(product_id, client_id);
 
+        try {
+            session.execute(bs);
+        } catch (Exception e) {
+            throw new BackendException("Could not perform an upsert. " + e.getMessage() + ".", e);
+        }
 
-    public String getUser(int id) throws BackendException {
+        logger.info("History Order inserted");
+    }
+
+    //QUANTITIES
+    public void decreaseStorage(int id) throws BackendException {
+        BoundStatement bs = new BoundStatement(DECREASE_STORAGE_QUANTITY);
+        bs.bind(id);
+
+        try {
+            session.execute(bs);
+        } catch (Exception e) {
+            throw new BackendException("Could not perform an upsert. " + e.getMessage() + ".", e);
+        }
+
+        logger.info("Product " + id + " storage quantity decreased");
+    }
+
+    public String getProductQuantity(int id) throws BackendException {
         StringBuilder builder = new StringBuilder();
         BoundStatement bs = new BoundStatement(GET_PRODUCT);
         bs.bind(id);
@@ -85,16 +134,15 @@ public class BackendSession {
         for (Row row : rs) {
             int rId = row.getInt("id");
             long rQuantity = row.getLong("quantity");
-
             builder.append(String.format(PRODUCT_FORMAT, rId, rQuantity));
         }
 
         return builder.toString();
     }
 
-    public String selectAll() throws BackendException {
+    public String getNegativeQuantities() throws BackendException {
         StringBuilder builder = new StringBuilder();
-        BoundStatement bs = new BoundStatement(SELECT_ALL_FROM_PRODUCTS);
+        BoundStatement bs = new BoundStatement(GET_NEGATIVE_COUNTERS);
 
         ResultSet rs = null;
 
@@ -107,16 +155,37 @@ public class BackendSession {
         for (Row row : rs) {
             int rId = row.getInt("id");
             long rQuantity = row.getLong("quantity");
-
             builder.append(String.format(PRODUCT_FORMAT, rId, rQuantity));
         }
 
         return builder.toString();
     }
 
-    public void upsertProduct(int id, int quantity) throws BackendException {
-        BoundStatement bs = new BoundStatement(INSERT_INTO_PRODUCTS);
+    public String getProductStorageQuantity(int id) throws BackendException {
+        StringBuilder builder = new StringBuilder();
+        BoundStatement bs = new BoundStatement(GET_STORAGE_QUANTITY);
         bs.bind(id);
+
+        ResultSet rs = null;
+
+        try {
+            rs = session.execute(bs);
+        } catch (Exception e) {
+            throw new BackendException("Could not perform a query. " + e.getMessage() + ".", e);
+        }
+
+        for (Row row : rs) {
+            long rQuantity = row.getLong("storage_quantity");
+            builder.append(String.format(QUANTITY_FORMAT, rQuantity));
+        }
+
+        return builder.toString();
+    }
+
+    //PENDING ORDERS
+    public void addPendingOrder(int product_id, int client_id, int delivery_window) throws BackendException {
+        BoundStatement bs = new BoundStatement(INSERT_INTO_PENDING);
+        bs.bind(product_id, client_id, delivery_window);
 
         try {
             session.execute(bs);
@@ -124,11 +193,96 @@ public class BackendSession {
             throw new BackendException("Could not perform an upsert. " + e.getMessage() + ".", e);
         }
 
-        logger.info("Product " + id + " upserted");
+        logger.info("Pending Order inserted");
     }
 
-    public void updateProduct(int id, int quantity) throws BackendException {
-        BoundStatement bs = new BoundStatement(UPDATE_PRODUCT);
+    public String selectPendingOrders(int delivery_window) throws BackendException {
+        StringBuilder builder = new StringBuilder();
+        BoundStatement bs = new BoundStatement(GET_PENDINGS);
+        bs.bind(delivery_window);
+
+        ResultSet rs = null;
+
+        try {
+            rs = session.execute(bs);
+        } catch (Exception e) {
+            throw new BackendException("Could not perform a query. " + e.getMessage() + ".", e);
+        }
+
+        for (Row row : rs) {
+            int rProductId = row.getInt("product_id");
+            int rClientId = row.getInt("client_id");
+
+            builder.append(String.format(ORDERS_FORMAT, rProductId, rClientId));
+        }
+
+        return builder.toString();
+    }
+
+    public void deletePendingOrders(int delivery_window) throws BackendException {
+        BoundStatement bs = new BoundStatement(DELETE_PENDINGS);
+        bs.bind(delivery_window);
+
+        try {
+            session.execute(bs);
+        } catch (Exception e) {
+            throw new BackendException("Could not perform an upsert. " + e.getMessage() + ".", e);
+        }
+
+        logger.info("Pending orders with delivery window " + delivery_window + " deleted");
+    }
+
+    //WAITING
+    public void addWaitingOrder(int product_id, int client_id) throws BackendException {
+        BoundStatement bs = new BoundStatement(INSERT_INTO_WAITING);
+        bs.bind(product_id, client_id);
+
+        try {
+            session.execute(bs);
+        } catch (Exception e) {
+            throw new BackendException("Could not perform an upsert. " + e.getMessage() + ".", e);
+        }
+
+        logger.info("Waiting Order inserted");
+    }
+
+    public String selectWaitingOrders() throws BackendException {
+        StringBuilder builder = new StringBuilder();
+        BoundStatement bs = new BoundStatement(GET_WAITINGS);
+
+        ResultSet rs = null;
+
+        try {
+            rs = session.execute(bs);
+        } catch (Exception e) {
+            throw new BackendException("Could not perform a query. " + e.getMessage() + ".", e);
+        }
+
+        for (Row row : rs) {
+            int rProductId = row.getInt("product_id");
+            int rClientId = row.getInt("client_id");
+
+            builder.append(String.format(ORDERS_FORMAT, rProductId, rClientId));
+        }
+
+        return builder.toString();
+    }
+
+    public void deleteAllWaitings() throws BackendException {
+        BoundStatement bs = new BoundStatement(DELETE_ALL_WAITINGS);
+
+        try {
+            session.execute(bs);
+        } catch (Exception e) {
+            throw new BackendException("Could not perform a delete operation. " + e.getMessage() + ".", e);
+        }
+
+        logger.info("All waiting orders deleted");
+    }
+
+    //PRODUCTS
+    public void updateProduct(int id) throws BackendException {
+        BoundStatement bs = new BoundStatement(DECREASE_QUANTITY);
         bs.bind(id);
 
         try {
@@ -140,9 +294,9 @@ public class BackendSession {
         logger.info("Product " + id + " updated");
     }
 
-    public void deliverProducts(int id) throws BackendException {
-        BoundStatement bs = new BoundStatement(INSERT_INTO_PRODUCTS);
-        bs.bind(id);
+    public void increaseQuantities(int id, long quantity, long storage_quantity) throws BackendException {
+        BoundStatement bs = new BoundStatement(INCREASE_QUANTITY);
+        bs.bind(quantity, storage_quantity, id);
 
         try {
             session.execute(bs);
@@ -152,19 +306,6 @@ public class BackendSession {
 
         logger.info("Products updated");
     }
-
-    public void deleteAll() throws BackendException {
-        BoundStatement bs = new BoundStatement(DELETE_ALL_FROM_PRODUCTS);
-
-        try {
-            session.execute(bs);
-        } catch (Exception e) {
-            throw new BackendException("Could not perform a delete operation. " + e.getMessage() + ".", e);
-        }
-
-        logger.info("All products deleted");
-    }
-
 
     protected void finalize() {
         try {

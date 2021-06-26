@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class Main {
 
     private static final String PROPERTIES_FILENAME = "config.properties";
+    public static Shop shop;
 
     public final static void clearConsole()
     {
@@ -41,10 +42,17 @@ public class Main {
         int numberOfClients = Integer.parseInt(scan.nextLine());
         System.out.println("Number of clients set to " + numberOfClients);
 
+        System.out.println("Set delivery size: ");
+        int deliverySize = Integer.parseInt(scan.nextLine());
+        System.out.println("Number of clients set to " + deliverySize);
+
+        shop = new Shop();
+        shop.setDeliverySize(deliverySize);
 
         for (int i=0; i<numberOfProducts; i++){
-            Shop.getInstance().addNewProduct(i);
+            shop.addNewProduct(i);
         }
+        System.out.println("Products added");
 
         List<Thread> clientsThreads = new ArrayList<Thread>();
         for(int i=0; i<numberOfClients;i++){
@@ -53,7 +61,8 @@ public class Main {
             clientsThreads.add(clientThread);
         }
 
-        Thread shopThread = new Thread(Shop.getInstance());
+        Thread shopThread = new Thread(shop);
+
         shopThread.start();
 
         for(int i=0; i<numberOfClients; i++){
